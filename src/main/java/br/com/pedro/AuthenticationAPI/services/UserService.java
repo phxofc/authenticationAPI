@@ -1,5 +1,7 @@
 package br.com.pedro.AuthenticationAPI.services;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +28,15 @@ public class UserService {
 		UserDTO dto = new UserDTO(createdUser);
 		
 		return dto;
+	}
+	
+	public List<UserDTO> findAll(){
+		
+		 List<User> result = userRepository.findAll();
+		 
+		 return result.stream().map(x -> new UserDTO(x)).toList();
+			
+		
 	}
 
 }
