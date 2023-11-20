@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import br.com.pedro.AuthenticationAPI.dto.UserDTO;
 import br.com.pedro.AuthenticationAPI.entities.User;
@@ -30,6 +31,8 @@ public class UserService {
 		return dto;
 	}
 	
+	
+	
 	public List<UserDTO> findAll(){
 		
 		 List<User> result = userRepository.findAll();
@@ -37,6 +40,14 @@ public class UserService {
 		 return result.stream().map(x -> new UserDTO(x)).toList();
 			
 		
+	}
+	
+	public UserDTO findbyId(Long id) {
+		
+		User findbyIdUser = userRepository.findById(id).get();
+		UserDTO dto = new UserDTO(findbyIdUser);
+		
+		return dto;
 	}
 
 }
