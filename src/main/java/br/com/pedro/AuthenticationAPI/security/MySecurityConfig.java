@@ -5,6 +5,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -18,11 +20,16 @@ public class MySecurityConfig {
 		
 		http.csrf().disable() //desabilito o csrf pq eu que vou tratar a autenticação dos usuarios
 			.authorizeHttpRequests()  // agora as requisições htttp sao passiveis de autorização
-			.requestMatchers(HttpMethod.GET,"/users").permitAll()// especificando quem é liberado
+			.requestMatchers(HttpMethod.POST,"/users").permitAll()// especificando quem é liberado
 			.anyRequest().authenticated().and().cors(); // todas as urls precisaram de autenticação
 	
 		http.addFilterBefore(new MyFilter(), UsernamePasswordAuthenticationFilter.class);
 		return http.build();
 	}
+	
+	  @Bean
+	    public BCryptPasswordEncoder bCryptPasswordEncoder() {
+	        return new BCryptPasswordEncoder();
+	    }
 
 }

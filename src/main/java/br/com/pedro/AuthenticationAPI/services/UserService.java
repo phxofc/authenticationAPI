@@ -3,6 +3,7 @@ package br.com.pedro.AuthenticationAPI.services;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -15,6 +16,8 @@ public class UserService {
 	
 	@Autowired
 	UserRepository userRepository;
+	@Autowired
+    private BCryptPasswordEncoder bcryptEncoder;
 	
 	public UserDTO createdUser (User user) {
 		
@@ -23,6 +26,7 @@ public class UserService {
 		if (existsUser != null) {
 		      throw new Error("User already exists!");
 		    }
+		user.setPassword(bcryptEncoder.encode(user.getPassword()));
 		
 		User createdUser = userRepository.save(user);
 		
