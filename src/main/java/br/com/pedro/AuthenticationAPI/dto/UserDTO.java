@@ -1,8 +1,11 @@
 package br.com.pedro.AuthenticationAPI.dto;
 
-import br.com.pedro.AuthenticationAPI.entities.User;
 
-public class UserDTO {
+
+import br.com.pedro.AuthenticationAPI.entities.User;
+import br.com.pedro.AuthenticationAPI.entities.UserRole;
+
+public class UserDTO{
 
 	private Long id;
 	
@@ -11,6 +14,8 @@ public class UserDTO {
 	private String username;
 	
 	private String password;
+	
+	private UserRole role;
 	
 	
 	public UserDTO() {
@@ -24,6 +29,7 @@ public class UserDTO {
 		name = user.getName();
 		username = user.getUsername();
 		password = user.getPassword();
+		role = user.getRole();
 	}
 
 
@@ -47,13 +53,24 @@ public class UserDTO {
 	}
 
 
-	public String getUsername() {
-		return username;
-	}
+	
 
 
 	public void setUsername(String username) {
 		this.username = username;
+	}
+
+
+	
+
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+
+	public String getUsername() {
+		return username;
 	}
 
 
@@ -62,9 +79,18 @@ public class UserDTO {
 	}
 
 
-	public void setPassword(String password) {
-		this.password = password;
+	public UserRole getRole() {
+		return role;
 	}
+
+
+	public void setRole(UserRole role) {
+		this.role = role;
+	}
+	
+	
+
+
 	
 	
 	

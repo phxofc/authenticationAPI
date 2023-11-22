@@ -3,6 +3,10 @@ package br.com.pedro.AuthenticationAPI.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,6 +30,35 @@ public class UserController {
 		
 		return userService.createdUser(user);
 	}
+	
+	
+	
+	@Autowired
+	AuthenticationManager authenticationManager;
+	
+	 @PostMapping("/login")
+	 
+	    public ResponseEntity login(@RequestBody UserDTO userdto){
+		 
+		 try {
+			 
+			 var usernamePassword = new UsernamePasswordAuthenticationToken(
+					 userdto.getUsername(),
+					 userdto.getPassword());
+		        var auth = this.authenticationManager.authenticate(usernamePassword);
+
+
+		        return ResponseEntity.ok().build();
+			
+		} catch (Exception e) {
+			 
+		        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("USUARIO OU SENHA INCORRETO");
+		}
+		 
+	       
+	    }
+	 
+
 	
 	
 	@GetMapping
