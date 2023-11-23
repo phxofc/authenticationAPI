@@ -14,8 +14,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.pedro.AuthenticationAPI.dto.LoginResponseDTO;
 import br.com.pedro.AuthenticationAPI.dto.UserDTO;
 import br.com.pedro.AuthenticationAPI.entities.User;
+import br.com.pedro.AuthenticationAPI.security.TokenService;
 import br.com.pedro.AuthenticationAPI.services.UserService;
 
 @RestController
@@ -25,7 +27,7 @@ public class UserController {
 	@Autowired
 	UserService userService;
 	
-	@PostMapping
+	@PostMapping("/create")
 	public UserDTO create(@RequestBody User user) {
 		
 		return userService.createdUser(user);
@@ -35,6 +37,9 @@ public class UserController {
 	
 	@Autowired
 	AuthenticationManager authenticationManager;
+	@Autowired
+	TokenService tokenservice;
+	
 	
 	 @PostMapping("/login")
 	 
@@ -48,7 +53,9 @@ public class UserController {
 		        var auth = this.authenticationManager.authenticate(usernamePassword);
 
 
-		        return ResponseEntity.ok().build();
+		        var token = tokenservice.generateToken((User)auth.getPrincipal());
+		        
+		        return ResponseEntity.ok(new LoginResponseDTO(token));
 			
 		} catch (Exception e) {
 			 
@@ -62,13 +69,20 @@ public class UserController {
 	
 	
 	@GetMapping
-	public List<UserDTO> findAll() {	
-		return userService.findAll();
+	public ResponseEntity<List<UserDTO>>  findAll() {	
+		
+		List<UserDTO> users = userService.findAll();
+		
+		return new ResponseEntity<>(users, HttpStatus.OK);
 	}
 	
+	
 	@GetMapping(value = "/{id}")
-	public UserDTO findbyId(@PathVariable Long id) {	
-		return userService.findbyId(id);
+	public ResponseEntity<UserDTO>  findbyId(@PathVariable Long id) {	
+		
+		var user = userService.findbyId(id);
+		
+		return new ResponseEntity<UserDTO>(user,HttpStatus.OK) ;
 	}
 
 
